@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="main-wrapper">
+        <h1 id="header">Calculator</h1>
+        <input type="text" v-model="inputNum" id="result">
+        <div class="clr">
+            <button @click="clear">C</button>
+            <button @click="clearAll">CE</button>
+        </div>
+        <div class="wrapper">
+            <input type="button" @click="value" value="7">
+            <input type="button" @click="value" value="8">
+            <input type="button" @click="value" value="9">
+            <input type="button" @click="operator" value="/">
+            <input type="button" @click="value" value="4">
+            <input type="button" @click="value" value="5">
+            <input type="button" @click="value" value="6">
+            <input type="button" @click="operator" value="*">
+            <input type="button" @click="value" value="1">
+            <input type="button" @click="value" value="2">
+            <input type="button" @click="value" value="3">
+            <input type="button" @click="operator" value="-">
+            <input type="button" @click="value" value="0">
+            <input type="button" @click="value" value=".">
+            <input type="button" @click="operator" value="+">
+            <button @click="result">=</button>
+        </div>
+    </div>
+
+    <script src="vue.js"></script>
+    <script>
+
+        const { createApp } = Vue;
+        createApp({
+            data(){
+                return {
+                    inputNum:'',
+                    op:'',
+                    res:'',
+                    operators:['+','-','*','/'],
+                    check: false,
+                    isResultDone: false
+                }
+            },
+           methods:{
+            result: function(){
+                this.res = eval(this.inputNum) 
+                this.inputNum = this.res.toString()
+                this.op = ''
+                this.isResultDone = true
+            },
+            operator:function(e){
+                this.check = this.operators.includes(this.inputNum.charAt(this.inputNum.length -1)) ? true:false
+                this.isResultDone = false
+                if(this.check){
+                    this.inputNum = this.inputNum.slice(0,this.inputNum.length - 1)
+                    this.inputNum += e.target.value
+                    this.check = false
+                }else{
+                    this.inputNum += e.target.value
+                }
+            },
+            value: function(e){
+                if(this.isResultDone){
+                    this.inputNum =''
+                    this.inputNum += e.target.value
+                    this.isResultDone = false
+                }else{
+                    this.inputNum += e.target.value
+                }
+            },
+            clear: function(){
+                this.inputNum = this.inputNum.slice(0,this.inputNum.length - 1)
+            },
+            clearAll: function(){
+                this.inputNum = "";
+            }
+           }
+        }).mount('.main-wrapper')
+    </script>
+</body>
+</html>
